@@ -1,20 +1,22 @@
 # C3 – Component Diagram
 
-## 1. Modules and imports
+Inside the backend and the frontend: modules, components, request pipeline, rate-limit numbers. System-level topology, secrets and failure behavior are in `c2-container.md`.
+
+## 1. Backend modules and imports
 
 Feature-based modules. Only `AuthModule` combines them. No cycles.
 
 ```mermaid
 flowchart TB
     app["AppModule"]
-    auth["AuthModule<br/>controller, AuthService, TokenService,<br/>LoginAttemptService, guards"]
-    users["UsersModule<br/>UsersService"]
-    sessions["SessionsModule<br/>SessionsService"]
-    rtokens["RefreshTokensModule<br/>RefreshTokensService"]
-    rl["RateLimitModule<br/>RATE_LIMIT_STORE, throttler guards"]
-    db["DatabaseModule, global<br/>Mongoose connection<br/>TRANSACTION_RUNNER"]
-    cfg["ConfigModule, global<br/>env validation"]
-    common["CommonModule<br/>AuditLogger, HttpExceptionFilter, OriginGuard"]
+    auth["AuthModule"]
+    users["UsersModule"]
+    sessions["SessionsModule"]
+    rtokens["RefreshTokensModule"]
+    rl["RateLimitModule"]
+    db["DatabaseModule, global"]
+    cfg["ConfigModule, global"]
+    common["CommonModule"]
 
     app --> auth & users & sessions & rtokens & rl & db & cfg & common
     auth --> users & sessions & rtokens & rl
@@ -43,24 +45,9 @@ flowchart LR
     filt --> client
 ```
 
-## 3. Layering inside a feature module
+## 3. Backend components
 
 Dependency direction: controller, then service, then repository interface. The Mongoose class implements the interface.
-
-```mermaid
-flowchart LR
-    ctl["Controller<br/>thin"]
-    svc["Service<br/>business rules"]
-    iface(["Repository interface<br/>+ injection token"])
-    impl["Mongoose repository<br/>+ schema"]
-    db[("MongoDB")]
-
-    ctl --> svc --> iface
-    impl -. "implements" .-> iface
-    impl --> db
-```
-
-## 4. Backend components
 
 ```mermaid
 flowchart TB
@@ -71,10 +58,10 @@ flowchart TB
         lat["LoginAttemptService"]
     end
     subgraph usersm[UsersModule]
+        uc["UsersController<br/>GET /users/me"]
         us["UsersService"]
         ur(["UsersRepository"])
         urm["MongooseUsersRepository"]
-        uc["UsersController<br/>GET /users/me"]
     end
     subgraph sessm[SessionsModule]
         ss["SessionsService"]
@@ -91,12 +78,12 @@ flowchart TB
         trm["MongooseTransactionRunner"]
     end
     subgraph rlm[RateLimitModule]
-        rl(["RateLimitStore<br/>strategy"])
+        rl(["RateLimitStore<br/>strategy, chosen by RATE_LIMIT_STORE"])
         redisS["RedisRateLimitStore<br/>default"]
         memS["MemoryRateLimitStore<br/>tests"]
     end
     al["AuditLogger"]
-    mongo[("MongoDB replica set")]
+    mongo[("MongoDB")]
     redis[("Redis")]
 
     ac --> as
@@ -117,7 +104,7 @@ flowchart TB
     redisS --> redis
 ```
 
-## 5. Transaction boundary per flow
+## 4. Transaction boundary per flow
 
 `AuthService` opens one transaction through `TransactionRunner`. Each repository write joins it. The access JWT is signed only after the commit.
 
@@ -143,29 +130,21 @@ flowchart LR
     commit --> jwt["then sign access JWT"]
 ```
 
-## 6. Rate-limit strategy
+## 5. Which component enforces which limit
 
 ```mermaid
 flowchart LR
-    ipg["IpThrottlerGuard"]
-    ug["UserThrottlerGuard"]
-    lat["LoginAttemptService"]
-    as["AuthService<br/>signup and refresh counters"]
+    ipg["IpThrottlerGuard<br/>sign up 5 per hour<br/>sign in 10 per minute<br/>logout 20 per minute<br/>refresh 10 per minute"]
+    as["AuthService<br/>sign up: email hash + IP 3 per hour,<br/>email hash 15 per hour<br/>refresh: sid 10 per minute"]
+    lat["LoginAttemptService<br/>sign in: email hash,<br/>5 failures in 15 min,<br/>then delay 1, 2, 4 min, max 15"]
+    ug["UserThrottlerGuard<br/>userId 60 per minute<br/>after token and session check"]
     rl(["RateLimitStore<br/>hit(key, limit, window)"])
-    cfg{"RATE_LIMIT_STORE"}
-    redisS["RedisRateLimitStore<br/>one atomic script per hit"]
-    memS["MemoryRateLimitStore<br/>unit tests"]
-    redis[("Redis")]
+    res["Over the limit:<br/>429 + Retry-After"]
 
-    ipg & ug & lat & as --> rl
-    cfg -- "redis, default" --> redisS
-    cfg -- "memory" --> memS
-    redisS -. implements .-> rl
-    memS -. implements .-> rl
-    redisS --> redis
+    ipg & as & lat & ug --> rl --> res
 ```
 
-## 7. Frontend components
+## 6. Frontend components
 
 ```mermaid
 flowchart TB
@@ -195,7 +174,7 @@ flowchart TB
     app --> ctx
 ```
 
-## 8. RefreshCoordinator behavior
+## 7. RefreshCoordinator behavior
 
 ```mermaid
 flowchart TB

@@ -1,8 +1,6 @@
 # Authentication Flow (overview)
 
-Technical rules live in `c2-container.md` (platform and security), `c3-component.md` (modules, repositories, request pipeline), `c4-code.md` (interfaces, DI tokens, transactions, rules) and `database-design.md` (collections and indexes). Build order: `../implementation-plan.md`.
-
-Layering: a thin controller calls a service. The service applies the rules and calls repositories. Only the Mongoose repositories touch MongoDB. When several changes must succeed together (sign up, sign in, refresh rotation, logout), the auth service wraps them in one transaction.
+Technical rules live in `c2-container.md` (platform and security), `c3-component.md` (modules, repositories, request pipeline), `c4-code.md` (interfaces, DI tokens, transactions, rules) and `database-design.md`
 
 | # | Flow | Summary |
 |---|---|---|
