@@ -1,37 +1,39 @@
-# Database Design (MongoDB + Mongoose)
+# Database Design (ERD)
 
 ```mermaid
 erDiagram
-    USERS ||--o{ SESSIONS : "has many"
-    SESSIONS ||--o{ REFRESH_TOKENS : "has many (rotation chain)"
-    REFRESH_TOKENS |o--o| REFRESH_TOKENS : "replacedBy"
+    USERS ||--o{ SESSIONS : "has"
+    SESSIONS ||--o{ REFRESH_TOKENS : "has"
+    REFRESH_TOKENS |o--o| REFRESH_TOKENS : "replaced_by"
 
     USERS {
-        ObjectId id PK
-        string email UK "trimmed, lowercase"
+        ObjectId _id PK
+        string email UK
         string name
         string passwordHash
-        boolean disabled
+        boolean isDisabled
         date createdAt
+        date updatedAt
     }
+
     SESSIONS {
-        ObjectId id PK "this is the sid in the JWT"
-        ObjectId userId FK "index"
+        ObjectId _id PK
+        ObjectId userId FK
         date createdAt
-        date expiresAt "created + 30 days, TTL index"
-        date revokedAt "null while active"
-    }
-    REFRESH_TOKENS {
-        ObjectId id PK
-        ObjectId sid FK "index"
-        string tokenHash UK "SHA-256 of the raw token"
-        date createdAt
-        date expiresAt "created + 7 days, TTL index"
-        date usedAt "null until rotated"
-        ObjectId replacedBy "id of the next token"
-        int reuseAttempts
-        string consumedIp
-        string consumedUaHash
+        date lastUsedAt
+        date expiresAt
         date revokedAt
+        string revokedReason
+    }
+
+    REFRESH_TOKENS {
+        ObjectId _id PK
+        ObjectId sessionId FK
+        string tokenHash UK
+        ObjectId replacedBy FK
+        date usedAt
+        date revokedAt
+        date expiresAt
+        date createdAt
     }
 ```
