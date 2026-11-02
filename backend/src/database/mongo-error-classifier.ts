@@ -17,6 +17,10 @@ export class MongoErrorClassifier {
     return (err as { code?: number })?.code === MONGO_WRITE_CONFLICT;
   }
 
+  isMongoError(err: unknown): boolean {
+    return /^Mongo/.test((err as { name?: string })?.name ?? '');
+  }
+
   classify(err: unknown): AuthError {
     if (err instanceof AuthError) return err;
     if (this.isDuplicateKey(err)) return new EmailTakenError();

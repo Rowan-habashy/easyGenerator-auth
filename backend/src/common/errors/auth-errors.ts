@@ -51,7 +51,7 @@ export class RefreshConflictError extends AuthError {
   }
 }
 export class RateLimitedError extends AuthError {
-  constructor(retryAfterSeconds = 60) {
+  constructor(retryAfterSeconds: number) {
     super(429, 'RATE_LIMITED', 'Too many requests', false, retryAfterSeconds);
   }
 }

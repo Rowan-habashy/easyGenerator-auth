@@ -1,62 +1,129 @@
 # Backend (NestJS + MongoDB)
 
-Implements the design in `../docs/architecture`.
+This backend implements the architecture in `../docs/architecture`.
 
-## Setup
-1. `cp .env.example .env` and set `JWT_SECRET`.
-2. Start MongoDB as a **replica set** (transactions require it), e.g.
-   `mongod --replSet rs0` then `rs.initiate()` in `mongosh`.
-3. Redis is optional. The default `RATE_LIMIT_STORE=memory` needs no Redis (see [Rate limit store](#rate-limit-store)).
-4. For local HTTP development set `COOKIE_SECURE=false`.
-4. `npm install && npm run start:dev`
+This guide is meant for **developers/reviewers** to quickly:
+- understand the project structure,
+- configure local or production-backed runs,
+- run and test safely,
+- and deploy with the expected environment.
+
+## Architecture at a glance
+
+Main feature modules:
+- `auth` (module surface: controller/service/guard/dto/constants)
+- `users`
+- `sessions`
+- `tokens`
+
+Shared code:
+- `common/errors`, `common/filters`, `common/guards`, `common/http`, `common/middleware`, `common/helpers`
+- `database` (transaction runner + mongo error classifier)
+- `config` (typed environment loading)
+- `redis` (redis provider + throttler storage)
+
+## Quick start (local)
+
+1. Copy env file and set required variables:
+   - `cp .env.example .env`
+   - set `JWT_SECRET`
+2. Start MongoDB as a **replica set** (required for transactions):
+   - `mongod --replSet rs0`
+   - then run `rs.initiate()` in `mongosh` (first time only)
+3. For local HTTP development:
+   - set `COOKIE_SECURE=false`
+4. Install and run:
+   - `npm install`
+   - `npm run start:dev`
 
 ## Configuration
-All tunable values (TTLs, limits, cookie settings, JWT, bcrypt cost, Redis/Mongo URLs) are read from environment variables in one place: `src/config/app-config.ts`. Required: `MONGODB_URI`, `JWT_SECRET`, `FRONTEND_ORIGIN`. `REDIS_URL` is required only when `RATE_LIMIT_STORE=redis`. Everything else has a documented default; see `.env.example` for the full list.
-Fixed protocol values (Mongo error codes, collection names, route bases, validation limits) live in `src/common/constants.ts`.
 
-## Endpoints
-| Method | Path | Notes |
-|---|---|---|
-| POST | `/api/auth/signup` | 201, access token in body, refresh token in cookie |
-| POST | `/api/auth/signin` | 200, same as above |
-| POST | `/api/auth/refresh` | 200, rotates refresh token (single use) |
-| POST | `/api/auth/logout` | 204, ends session, clears cookie |
-| GET | `/api/users/me` | Bearer access token required |
+All runtime config is centralized in `src/config/app-config.ts`.
 
-Sample calls are in `requests.http`.
+Required values:
+- `MONGODB_URI`
+- `JWT_SECRET`
+- `FRONTEND_ORIGIN`
 
-## Layout
-`common` (errors, filter, origin guard, limiter), `users`, `sessions`, `tokens`, `auth`.
+Conditionally required:
+- `REDIS_URL` only when `RATE_LIMIT_STORE=redis`
 
-## Notes
-- Rate limits (general per-IP and failed sign-in) use the store chosen by `RATE_LIMIT_STORE` (below). Failed sign-ins are limited per IP (5) and per email (10) per 15 minutes. With the Redis store, if Redis is down the failed sign-in limiter falls back to a per-instance in-memory counter and the general throttler fails open, with a warning logged.
-- TTL indexes purge sessions and refresh tokens 7 days after they expire.
+All other values have defaults in `.env.example`.
 
-## Rate limit store
+## Local DB vs Production DB connection profiles
 
-Rate-limit counters (general per-IP limit and failed sign-in limits) are kept in one of two stores, chosen with `RATE_LIMIT_STORE`.
+You can run this backend locally while pointing to either local or production services.
+
+### Option A: local app + local database (recommended for development)
+
+Use in `.env`:
+
+```env
+MONGODB_URI=mongodb://localhost:27017/easygenerator?replicaSet=rs0
+RATE_LIMIT_STORE=memory
+# REDIS_URL not required in memory mode
+```
+
+### Option B: local app + production database (review/debug mode)
+
+Use in `.env`:
+
+```env
+MONGODB_URI=<production-mongodb-uri>
+RATE_LIMIT_STORE=redis
+REDIS_URL=<production-redis-uri>
+COOKIE_SECURE=true
+```
+
+
+
+Sample requests can be kept in `requests.http` or Postman.
+
+## Run, test, and build
+
+- Dev run: `npm run start:dev`
+- Run tests: `npm test`
+- Coverage: `npm run test:cov`
+- Build: `npm run build`
+- Run built app: `npm run start`
+
+## API documentation (Swagger)
+
+Swagger is enabled for this backend.
+
+- Swagger UI: `/api/docs`
+- OpenAPI JSON: `/api/docs-json`
+
+When running locally, open:
+- `http://localhost:3000/api/docs`
+
+Auth notes in Swagger:
+- Bearer JWT is documented for protected endpoints (for example `GET /api/users/me`).
+- Refresh flow uses an HTTP-only cookie (`refresh_token` by default), documented as cookie auth.
+
+## Deploy checklist
+
+1. Build artifacts:
+   - `npm ci`
+   - `npm run build`
+2. Set environment variables in deployment platform:
+   - required vars above
+   - `RATE_LIMIT_STORE=redis` for multi-instance deployments
+   - `COOKIE_SECURE=true` in production
+3. Provide reachable infrastructure:
+   - MongoDB replica set
+   - Redis (if redis rate-limit store is enabled)
+4. Start command:
+   - `npm run start`
+
+## Rate-limit store behavior
 
 | Value | Use when | Needs Redis |
 | ----- | -------- | ----------- |
-| `memory` (default) | Local development, a single instance. Free, nothing to run. | No |
-| `redis` | Several instances behind a load balancer, so they share one set of counters. | Yes |
-
-Single instance (default):
-
-```env
-RATE_LIMIT_STORE=memory
-```
-
-Multi-instance deployment:
-
-```env
-RATE_LIMIT_STORE=redis
-REDIS_URL=redis://your-redis-host:6379
-```
+| `memory` (default) | single instance, local development | No |
+| `redis` | multi-instance / shared counters | Yes |
 
 Notes:
-
-- With `memory`, counters live in each process, reset on restart, and are not shared. Two instances each allow their own limit, so the effective limit is the limit times the number of instances. Use `redis` before running more than one instance.
-- With `memory`, no Redis connection is opened and `REDIS_URL` is ignored.
-- With `redis`, `REDIS_URL` is required and the app fails at startup without it. An invalid `RATE_LIMIT_STORE` value also fails at startup.
-- Redis can be self-hosted (`docker run -p 6379:6379 redis`) or a managed service. A free option is not needed unless you run multiple instances.
+- In `memory` mode, counters are per process and reset on restart.
+- In `redis` mode, `REDIS_URL` is mandatory and startup fails without it.
+- Failed sign-in limiter can fallback to in-memory per instance if Redis is unavailable; warnings are logged.

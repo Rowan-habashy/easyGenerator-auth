@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { AccountDisabledError, InvalidAccessTokenError } from '../common/errors/auth-errors';
+import { extractBearerToken } from '../common/http/bearer-token';
 import { AppRequest } from '../common/types/request.types';
 import { SessionsService } from '../sessions/sessions.service';
 import { TokensService } from '../tokens/tokens.service';
@@ -15,9 +16,8 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
     const req = ctx.switchToHttp().getRequest<AppRequest>();
-    const header = req.headers.authorization ?? '';
-    const [scheme, token] = header.split(' ');
-    if (scheme !== 'Bearer' || !token) throw new InvalidAccessTokenError();
+    const token = extractBearerToken(req);
+    if (!token) throw new InvalidAccessTokenError();
 
     const payload = await this.tokens.verifyAccess(token);
 

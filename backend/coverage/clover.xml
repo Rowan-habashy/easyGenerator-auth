@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1793653658024" clover="3.2.0">
+  <project timestamp="1793653658024" name="All files">
+    <metrics statements="515" coveredstatements="382" conditionals="196" coveredconditionals="110" methods="119" coveredmethods="95" elements="830" coveredelements="587" complexity="0" loc="515" ncloc="515" packages="17" files="33" classes="33"/>
+    <package name="auth">
+      <metrics statements="33" coveredstatements="33" conditionals="10" coveredconditionals="10" methods="6" coveredmethods="6"/>
+      <file name="auth.constants.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/auth/auth.constants.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="7" type="stmt"/>
+        <line num="3" count="7" type="stmt"/>
+        <line num="5" count="7" type="stmt"/>
+      </file>
+      <file name="auth.guard.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/auth/auth.guard.ts">
+        <metrics statements="21" coveredstatements="21" conditionals="10" coveredconditionals="10" methods="2" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="12" count="6" type="stmt"/>
+        <line num="13" count="6" type="stmt"/>
+        <line num="14" count="6" type="stmt"/>
+        <line num="18" count="6" type="stmt"/>
+        <line num="19" count="6" type="stmt"/>
+        <line num="20" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="22" count="5" type="stmt"/>
+        <line num="24" count="5" type="stmt"/>
+        <line num="25" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="27" count="3" type="stmt"/>
+        <line num="28" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+      </file>
+      <file name="password-hasher.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/auth/password-hasher.ts">
+        <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="9" count="59" type="stmt"/>
+        <line num="10" count="59" type="stmt"/>
+        <line num="14" count="68" type="stmt"/>
+        <line num="18" count="45" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="auth.application">
+      <metrics statements="110" coveredstatements="110" conditionals="47" coveredconditionals="46" methods="18" coveredmethods="18"/>
+      <file name="auth.service.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/auth/application/auth.service.ts">
+        <metrics statements="34" coveredstatements="34" conditionals="12" coveredconditionals="12" methods="7" coveredmethods="7"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="21" count="57" type="stmt"/>
+        <line num="22" count="57" type="stmt"/>
+        <line num="23" count="57" type="stmt"/>
+        <line num="24" count="57" type="stmt"/>
+        <line num="25" count="57" type="stmt"/>
+        <line num="26" count="57" type="stmt"/>
+        <line num="30" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="31" count="10" type="stmt"/>
+        <line num="33" count="10" type="stmt"/>
+        <line num="34" count="13" type="stmt"/>
+        <line num="35" count="6" type="stmt"/>
+        <line num="40" count="45" type="stmt"/>
+        <line num="41" count="44" type="cond" truecount="2" falsecount="0"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="45" count="42" type="cond" truecount="2" falsecount="0"/>
+        <line num="46" count="39" type="cond" truecount="2" falsecount="0"/>
+        <line num="48" count="39" type="stmt"/>
+        <line num="52" count="37" type="cond" truecount="2" falsecount="0"/>
+        <line num="54" count="36" type="stmt"/>
+        <line num="55" count="13" type="stmt"/>
+        <line num="56" count="13" type="stmt"/>
+        <line num="60" count="11" type="stmt"/>
+        <line num="61" count="11" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="refresh-rotation.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/auth/application/refresh-rotation.ts">
+        <metrics statements="51" coveredstatements="51" conditionals="29" coveredconditionals="29" methods="6" coveredmethods="6"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="33" count="57" type="stmt"/>
+        <line num="34" count="57" type="stmt"/>
+        <line num="35" count="57" type="stmt"/>
+        <line num="36" count="57" type="stmt"/>
+        <line num="37" count="57" type="stmt"/>
+        <line num="38" count="57" type="stmt"/>
+        <line num="39" count="57" type="stmt"/>
+        <line num="43" count="36" type="stmt"/>
+        <line num="44" count="23" type="stmt"/>
+        <line num="45" count="13" type="stmt"/>
+        <line num="49" count="36" type="stmt"/>
+        <line num="50" count="35" type="cond" truecount="4" falsecount="0"/>
+        <line num="52" count="30" type="stmt"/>
+        <line num="53" count="30" type="cond" truecount="2" falsecount="0"/>
+        <line num="55" count="28" type="stmt"/>
+        <line num="56" count="28" type="cond" truecount="4" falsecount="0"/>
+        <line num="58" count="26" type="cond" truecount="2" falsecount="0"/>
+        <line num="59" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="60" count="2" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="63" count="23" type="stmt"/>
+        <line num="67" count="23" type="stmt"/>
+        <line num="68" count="23" type="stmt"/>
+        <line num="69" count="23" type="stmt"/>
+        <line num="70" count="23" type="cond" truecount="2" falsecount="0"/>
+        <line num="71" count="17" type="stmt"/>
+        <line num="72" count="16" type="stmt"/>
+        <line num="73" count="15" type="stmt"/>
+        <line num="76" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="78" count="8" type="cond" truecount="3" falsecount="0"/>
+        <line num="81" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="86" count="7" type="stmt"/>
+        <line num="87" count="7" type="stmt"/>
+        <line num="88" count="6" type="cond" truecount="4" falsecount="0"/>
+        <line num="89" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="90" count="3" type="stmt"/>
+        <line num="92" count="1" type="stmt"/>
+      </file>
+      <file name="session-lifecycle.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/auth/application/session-lifecycle.ts">
+        <metrics statements="25" coveredstatements="25" conditionals="6" coveredconditionals="5" methods="5" coveredmethods="5"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="62" type="stmt"/>
+        <line num="15" count="62" type="stmt"/>
+        <line num="16" count="62" type="stmt"/>
+        <line num="17" count="62" type="stmt"/>
+        <line num="21" count="46" type="stmt"/>
+        <line num="22" count="44" type="stmt"/>
+        <line num="23" count="44" type="stmt"/>
+        <line num="24" count="44" type="stmt"/>
+        <line num="28" count="11" type="stmt"/>
+        <line num="29" count="11" type="stmt"/>
+        <line num="30" count="10" type="stmt"/>
+        <line num="35" count="16" type="cond" truecount="2" falsecount="0"/>
+        <line num="36" count="11" type="stmt"/>
+        <line num="37" count="11" type="stmt"/>
+        <line num="39" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="40" count="4" type="stmt"/>
+        <line num="43" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="5" type="stmt"/>
+        <line num="46" count="4" type="stmt"/>
+      </file>
+    </package>
+    <package name="auth.http">
+      <metrics statements="52" coveredstatements="18" conditionals="8" coveredconditionals="3" methods="10" coveredmethods="5"/>
+      <file name="auth-response.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/auth/http/auth-response.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+      </file>
+      <file name="auth.controller.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/auth/http/auth.controller.ts">
+        <metrics statements="34" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+      </file>
+      <file name="auth.dto.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/auth/http/auth.dto.ts">
+        <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="3" methods="4" coveredmethods="4"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="13" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="auth.infrastructure">
+      <metrics statements="50" coveredstatements="50" conditionals="22" coveredconditionals="16" methods="11" coveredmethods="11"/>
+      <file name="counter-store.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/auth/infrastructure/counter-store.ts">
+        <metrics statements="28" coveredstatements="28" conditionals="16" coveredconditionals="13" methods="6" coveredmethods="6"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="4" type="stmt"/>
+        <line num="25" count="4" type="stmt"/>
+        <line num="26" count="4" type="stmt"/>
+        <line num="30" count="3" type="stmt"/>
+        <line num="31" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="39" count="7" type="stmt"/>
+        <line num="40" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="44" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="45" count="6" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="53" count="10" type="stmt"/>
+        <line num="54" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="55" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="65" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="67" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="69" count="1" type="cond" truecount="1" falsecount="1"/>
+      </file>
+      <file name="redis-counter-store.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/auth/infrastructure/redis-counter-store.ts">
+        <metrics statements="22" coveredstatements="22" conditionals="6" coveredconditionals="3" methods="5" coveredmethods="5"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="5" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="11" count="5" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="17" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="27" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="44" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="45" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="auth.policy">
+      <metrics statements="21" coveredstatements="21" conditionals="6" coveredconditionals="5" methods="9" coveredmethods="9"/>
+      <file name="failed-signin-limiter.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/auth/policy/failed-signin-limiter.ts">
+        <metrics statements="21" coveredstatements="21" conditionals="6" coveredconditionals="5" methods="9" coveredmethods="9"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="16" count="5" type="stmt"/>
+        <line num="17" count="5" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="4" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="26" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="27" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="31" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="4" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="43" count="5" type="stmt"/>
+        <line num="44" count="5" type="stmt"/>
+      </file>
+    </package>
+    <package name="common.constants">
+      <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="time.constants.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/common/constants/time.constants.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="common.errors">
+      <metrics statements="28" coveredstatements="26" conditionals="4" coveredconditionals="1" methods="12" coveredmethods="10"/>
+      <file name="auth-errors.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/common/errors/auth-errors.ts">
+        <metrics statements="28" coveredstatements="26" conditionals="4" coveredconditionals="1" methods="12" coveredmethods="10"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="3" count="50" type="stmt"/>
+        <line num="4" count="50" type="stmt"/>
+        <line num="6" count="50" type="cond" truecount="1" falsecount="0"/>
+        <line num="7" count="50" type="stmt"/>
+        <line num="9" count="50" type="stmt"/>
+        <line num="13" count="5" type="stmt"/>
+        <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="18" count="5" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="23" count="5" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="28" count="5" type="stmt"/>
+        <line num="30" count="5" type="stmt"/>
+        <line num="33" count="5" type="stmt"/>
+        <line num="35" count="8" type="stmt"/>
+        <line num="38" count="5" type="stmt"/>
+        <line num="40" count="13" type="stmt"/>
+        <line num="43" count="5" type="stmt"/>
+        <line num="45" count="2" type="stmt"/>
+        <line num="48" count="5" type="stmt"/>
+        <line num="50" count="3" type="stmt"/>
+        <line num="53" count="5" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="58" count="5" type="stmt"/>
+        <line num="60" count="2" type="stmt"/>
+        <line num="63" count="5" type="stmt"/>
+        <line num="65" count="14" type="stmt"/>
+      </file>
+    </package>
+    <package name="common.filters">
+      <metrics statements="33" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="3" coveredmethods="0"/>
+      <file name="auth-exception.filter.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/common/filters/auth-exception.filter.ts">
+        <metrics statements="33" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="28" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="common.guards">
+      <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <file name="origin.guard.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/common/guards/origin.guard.ts">
+        <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="21" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="common.http">
+      <metrics statements="8" coveredstatements="7" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="3"/>
+      <file name="bearer-token.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/common/http/bearer-token.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="5" count="6" type="cond" truecount="4" falsecount="0"/>
+      </file>
+      <file name="refresh-cookie.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/common/http/refresh-cookie.ts">
+        <metrics statements="5" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="common.middleware">
+      <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="request-id.middleware.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/common/middleware/request-id.middleware.ts">
+        <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="config">
+      <metrics statements="18" coveredstatements="5" conditionals="22" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <file name="app-config.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/config/app-config.ts">
+        <metrics statements="18" coveredstatements="5" conditionals="22" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="2" count="6" type="stmt"/>
+        <line num="4" count="6" type="stmt"/>
+        <line num="6" count="6" type="stmt"/>
+        <line num="33" count="6" type="stmt"/>
+        <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="55" count="6" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="database">
+      <metrics statements="61" coveredstatements="58" conditionals="18" coveredconditionals="13" methods="12" coveredmethods="11"/>
+      <file name="mongo-error-classifier.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/database/mongo-error-classifier.ts">
+        <metrics statements="12" coveredstatements="11" conditionals="8" coveredconditionals="6" methods="5" coveredmethods="4"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="8" count="7" type="stmt"/>
+        <line num="9" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="5" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="26" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="27" count="4" type="stmt"/>
+      </file>
+      <file name="mongo.constants.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/database/mongo.constants.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="4" count="3" type="stmt"/>
+      </file>
+      <file name="transaction-runner.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/database/transaction-runner.ts">
+        <metrics statements="45" coveredstatements="43" conditionals="10" coveredconditionals="7" methods="7" coveredmethods="7"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="11" count="65" type="stmt"/>
+        <line num="14" count="65" type="stmt"/>
+        <line num="15" count="65" type="stmt"/>
+        <line num="16" count="65" type="stmt"/>
+        <line num="21" count="61" type="stmt"/>
+        <line num="22" count="61" type="stmt"/>
+        <line num="24" count="61" type="stmt"/>
+        <line num="26" count="61" type="stmt"/>
+        <line num="27" count="68" type="cond" truecount="2" falsecount="0"/>
+        <line num="28" count="66" type="stmt"/>
+        <line num="31" count="53" type="stmt"/>
+        <line num="33" count="8" type="stmt"/>
+        <line num="35" count="61" type="stmt"/>
+        <line num="41" count="28" type="stmt"/>
+        <line num="42" count="28" type="stmt"/>
+        <line num="43" count="28" type="stmt"/>
+        <line num="46" count="28" type="stmt"/>
+        <line num="47" count="28" type="stmt"/>
+        <line num="49" count="9" type="stmt"/>
+        <line num="50" count="9" type="stmt"/>
+        <line num="53" count="19" type="stmt"/>
+        <line num="54" count="15" type="stmt"/>
+        <line num="56" count="28" type="stmt"/>
+        <line num="61" count="19" type="stmt"/>
+        <line num="62" count="24" type="stmt"/>
+        <line num="63" count="24" type="stmt"/>
+        <line num="64" count="15" type="stmt"/>
+        <line num="66" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="67" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="68" count="5" type="stmt"/>
+        <line num="71" count="2" type="stmt"/>
+        <line num="72" count="2" type="stmt"/>
+        <line num="78" count="9" type="stmt"/>
+        <line num="82" count="11" type="stmt"/>
+        <line num="83" count="11" type="cond" truecount="1" falsecount="1"/>
+        <line num="85" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="86" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="redis">
+      <metrics statements="21" coveredstatements="2" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <file name="redis-throttler.storage.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/redis/redis-throttler.storage.ts">
+        <metrics statements="19" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+      </file>
+      <file name="redis.constants.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/redis/redis.constants.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="sessions">
+      <metrics statements="14" coveredstatements="12" conditionals="5" coveredconditionals="3" methods="7" coveredmethods="6"/>
+      <file name="sessions.constants.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/sessions/sessions.constants.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="2" count="3" type="stmt"/>
+      </file>
+      <file name="sessions.service.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/sessions/sessions.service.ts">
+        <metrics statements="13" coveredstatements="11" conditionals="5" coveredconditionals="3" methods="7" coveredmethods="6"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
+        <line num="10" count="57" type="stmt"/>
+        <line num="11" count="57" type="stmt"/>
+        <line num="15" count="45" type="stmt"/>
+        <line num="19" count="30" type="stmt"/>
+        <line num="23" count="30" type="cond" truecount="3" falsecount="0"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="32" count="10" type="stmt"/>
+        <line num="36" count="16" type="stmt"/>
+      </file>
+    </package>
+    <package name="tokens">
+      <metrics statements="29" coveredstatements="29" conditionals="8" coveredconditionals="7" methods="11" coveredmethods="11"/>
+      <file name="refresh-token-state.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/tokens/refresh-token-state.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="40" type="cond" truecount="2" falsecount="0"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="3" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="tokens.constants.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/tokens/tokens.constants.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="2" count="3" type="stmt"/>
+      </file>
+      <file name="tokens.service.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/tokens/tokens.service.ts">
+        <metrics statements="24" coveredstatements="24" conditionals="4" coveredconditionals="3" methods="9" coveredmethods="9"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="15" count="3" type="stmt"/>
+        <line num="17" count="57" type="stmt"/>
+        <line num="18" count="57" type="stmt"/>
+        <line num="19" count="57" type="stmt"/>
+        <line num="23" count="56" type="stmt"/>
+        <line num="27" count="10" type="stmt"/>
+        <line num="28" count="10" type="stmt"/>
+        <line num="29" count="8" type="cond" truecount="3" falsecount="1"/>
+        <line num="30" count="8" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="37" count="99" type="stmt"/>
+        <line num="46" count="60" type="stmt"/>
+        <line num="47" count="60" type="stmt"/>
+        <line num="56" count="59" type="stmt"/>
+        <line num="60" count="39" type="stmt"/>
+        <line num="64" count="7" type="stmt"/>
+        <line num="68" count="23" type="stmt"/>
+        <line num="72" count="9" type="stmt"/>
+      </file>
+    </package>
+    <package name="users">
+      <metrics statements="21" coveredstatements="10" conditionals="2" coveredconditionals="0" methods="7" coveredmethods="5"/>
+      <file name="users.constants.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/users/users.constants.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+      </file>
+      <file name="users.controller.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/users/users.controller.ts">
+        <metrics statements="11" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="17" count="0" type="stmt"/>
+      </file>
+      <file name="users.service.ts" path="/Users/rowanhabashy/Documents/easyGenerator/backend/src/users/users.service.ts">
+        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="13" count="44" type="stmt"/>
+        <line num="21" count="3" type="stmt"/>
+        <line num="22" count="57" type="stmt"/>
+        <line num="25" count="56" type="stmt"/>
+        <line num="29" count="28" type="stmt"/>
+        <line num="33" count="13" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

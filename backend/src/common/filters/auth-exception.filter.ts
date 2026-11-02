@@ -4,8 +4,9 @@ import { Response } from 'express';
 import { APP_CONFIG, AppConfig } from '../../config/app-config';
 import { AuthError, RateLimitedError, ValidationError } from '../errors/auth-errors';
 import { MongoErrorClassifier } from '../../database/mongo-error-classifier';
+import { MS_PER_SECOND } from '../constants/time.constants';
+import { clearRefreshCookie } from '../http/refresh-cookie';
 import { AppRequest } from '../types/request.types';
-import { MONGO_DUPLICATE_KEY } from '../../database/mongo.constants';
 
 @Catch()
 export class AuthExceptionFilter implements ExceptionFilter {
@@ -23,10 +24,8 @@ export class AuthExceptionFilter implements ExceptionFilter {
 
     const err = this.toAuthError(exception);
 
-    if (err.clearCookie) {
-      res.clearCookie(this.cfg.cookie.name, { path: this.cfg.cookie.path });
-    }
-    if (err.retryAfterSeconds) {
+    if (err.clearCookie) clearRefreshCookie(res, this.cfg);
+    if (err.retryAfterSeconds && !res.getHeader('Retry-After')) {
       res.setHeader('Retry-After', String(err.retryAfterSeconds));
     }
 
@@ -44,14 +43,19 @@ export class AuthExceptionFilter implements ExceptionFilter {
 
   private toAuthError(exception: unknown): AuthError {
     if (exception instanceof AuthError) return exception;
-    if (exception instanceof ThrottlerException) return new RateLimitedError();
+    if (exception instanceof ThrottlerException) {
+      return new RateLimitedError(Math.ceil(this.cfg.throttle.ttlMs / MS_PER_SECOND));
+    }
     if (exception instanceof HttpException) {
       const status = exception.getStatus();
       const body = exception.getResponse() as { message?: string | string[] };
       if (status === 400) return new ValidationError(body?.message ?? 'Validation failed');
       return new AuthError(status, status === 404 ? 'NOT_FOUND' : 'HTTP_ERROR', exception.message);
     }
-    if ((exception as { code?: number })?.code === MONGO_DUPLICATE_KEY) return this.classifier.classify(exception);
+    if (this.classifier.isMongoError(exception) || this.classifier.isDuplicateKey(exception)) {
+      this.logger.error(`database error: ${(exception as Error).name}`);
+      return this.classifier.classify(exception);
+    }
     this.logger.error(exception instanceof Error ? exception.stack : String(exception));
     return new AuthError(500, 'INTERNAL_ERROR', 'Internal server error');
   }
