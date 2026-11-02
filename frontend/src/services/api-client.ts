@@ -1,4 +1,4 @@
-import { ApiError } from '../errors'
+import { ApiError, ERROR_CODE, HTTP_STATUS } from '../errors'
 import type { ApiMiddleware } from '../middleware'
 import {
   isAccessTokenExpired,
@@ -53,6 +53,15 @@ export function createApiClient({ apiBaseUrl, timeoutMs, maxAttempts, baseDelayM
     accessToken = token
   }
 
+  const shouldEndSessionOnRefreshFailure = (error: unknown) => {
+    if (!(error instanceof ApiError)) return false
+    return (
+      error.status === HTTP_STATUS.UNAUTHORIZED ||
+      error.status === HTTP_STATUS.CONFLICT ||
+      error.code === ERROR_CODE.REFRESH_OUTCOME_UNKNOWN
+    )
+  }
+
   const requestWithBackoff = <T>(path: string, options: RequestOptions) => withBackoff(() => requestExecutor.execute<T>(path, options))
 
   const refreshSession = (): Promise<void> => {
@@ -79,11 +88,20 @@ export function createApiClient({ apiBaseUrl, timeoutMs, maxAttempts, baseDelayM
     try {
       await refreshSession()
     } catch (error) {
-      onSessionExpired()
+      if (shouldEndSessionOnRefreshFailure(error)) {
+        onSessionExpired()
+      }
       throw error
     }
 
-    return requestWithBackoff<T>(path, options)
+    try {
+      return await requestWithBackoff<T>(path, options)
+    } catch (error) {
+      if (isAccessTokenExpired(error)) {
+        onSessionExpired()
+      }
+      throw error
+    }
   }
 
   const authenticate = async <TUser>(path: '/auth/signin' | '/auth/signup', body: unknown) => {
