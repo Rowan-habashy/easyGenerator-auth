@@ -25,7 +25,7 @@ describe('WelcomePage', () => {
     expect(html).toContain('Sign up')
   })
 
-  it('greets authenticated users and shows profile action', () => {
+  it('greets authenticated users and shows profile + logout actions', () => {
     vi.mocked(useAuth).mockReturnValue({
       status: 'authenticated',
       user: { id: 'u1', email: 'a@b.com', name: 'Rowan', createdAt: '2026-01-01' },
@@ -37,6 +37,7 @@ describe('WelcomePage', () => {
     const html = renderToStaticMarkup(createElement(MemoryRouter, undefined, createElement(WelcomePage)))
     expect(html).toContain('Hello, Rowan')
     expect(html).toContain('My profile')
+    expect(html).toContain('Log out')
     expect(html).not.toContain('Get started')
   })
 })

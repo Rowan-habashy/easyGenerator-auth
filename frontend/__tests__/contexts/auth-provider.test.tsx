@@ -23,6 +23,9 @@ describe('auth context/provider', () => {
     const child = { type: 'div', props: {}, key: null }
     const element = AuthProvider({ children: child })
 
+    expect(element).not.toBeNull()
+    if (!element) return
+
     expect(element.type).toBe(AuthContext.Provider)
     expect(element.props.value).toBe(mockedSession)
     expect(element.props.children).toBe(child)

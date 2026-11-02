@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import { routes } from '../routes'
 import { useAuth } from '../hooks/use-auth'
-import { Brand, LinkButton, Page as PageBackground } from '../design-system'
+import { Brand, Button, LinkButton, Page as PageBackground } from '../design-system'
 
 export function WelcomePage() {
-  const { status, user } = useAuth()
+  const { status, user, logout } = useAuth()
+  const [loggingOut, setLoggingOut] = useState(false)
   const authed = status === 'authenticated'
 
   return (
@@ -12,7 +14,20 @@ export function WelcomePage() {
         <Brand />
         <nav className="flex gap-2">
           {authed ? (
-            <LinkButton to={routes.profile}>My profile</LinkButton>
+            <>
+              <LinkButton to={routes.profile}>My profile</LinkButton>
+              <Button
+                variant="secondary"
+                fullWidth={false}
+                disabled={loggingOut}
+                onClick={async () => {
+                  setLoggingOut(true)
+                  await logout()
+                }}
+              >
+                {loggingOut ? 'Logging out…' : 'Log out'}
+              </Button>
+            </>
           ) : (
             <>
               <LinkButton to={routes.login} variant="ghost">
