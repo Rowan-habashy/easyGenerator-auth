@@ -9,7 +9,8 @@ import { REDIS } from './redis.constants';
     {
       provide: REDIS,
       inject: [APP_CONFIG],
-      useFactory: (cfg: AppConfig) => {
+      useFactory: (cfg: AppConfig): Redis | null => {
+        if (cfg.rateLimitStore !== 'redis') return null;
         const logger = new Logger('Redis');
         const client = new Redis(cfg.redisUrl, {
           maxRetriesPerRequest: 1,
@@ -24,9 +25,9 @@ import { REDIS } from './redis.constants';
   exports: [REDIS],
 })
 export class RedisModule implements OnApplicationShutdown {
-  constructor(@Inject(REDIS) private readonly redis: Redis) {}
+  constructor(@Inject(REDIS) private readonly redis: Redis | null) {}
 
   async onApplicationShutdown() {
-    this.redis.disconnect();
+    this.redis?.disconnect();
   }
 }

@@ -27,7 +27,7 @@ export class FailedSigninLimiter {
   private readonly memoryFallback = new Map<string, MemoryCounterEntry>();
 
   constructor(
-    @Inject(REDIS) private readonly redis: Redis,
+    @Inject(REDIS) private readonly redis: Redis | null,
     @Inject(APP_CONFIG) private readonly config: AppConfig,
   ) {}
 
@@ -67,21 +67,27 @@ export class FailedSigninLimiter {
   }
 
   private async readCounter(redisKey: string): Promise<CounterReading> {
+    if (!this.redis) return this.readMemoryCounter(redisKey);
     try {
       const [rawCount, ttlSeconds] = await Promise.all([this.redis.get(redisKey), this.redis.ttl(redisKey)]);
       return { failureCount: Number(rawCount ?? 0), secondsUntilReset: ttlSeconds };
     } catch (error) {
       this.logRedisFailure('read', error);
-      const entry = this.getLiveMemoryEntry(redisKey);
-      if (!entry) return { failureCount: 0, secondsUntilReset: 0 };
-      return {
-        failureCount: entry.failureCount,
-        secondsUntilReset: Math.ceil((entry.resetAtMs - Date.now()) / MS_PER_SECOND),
-      };
+      return this.readMemoryCounter(redisKey);
     }
   }
 
+  private readMemoryCounter(redisKey: string): CounterReading {
+    const entry = this.getLiveMemoryEntry(redisKey);
+    if (!entry) return { failureCount: 0, secondsUntilReset: 0 };
+    return {
+      failureCount: entry.failureCount,
+      secondsUntilReset: Math.ceil((entry.resetAtMs - Date.now()) / MS_PER_SECOND),
+    };
+  }
+
   private async incrementCounter(redisKey: string): Promise<void> {
+    if (!this.redis) return this.incrementMemoryCounter(redisKey);
     try {
       const newCount = await this.redis.incr(redisKey);
       if (newCount === 1) await this.redis.expire(redisKey, this.config.signin.windowSeconds);
@@ -93,6 +99,7 @@ export class FailedSigninLimiter {
 
   private async removeCounter(redisKey: string): Promise<void> {
     this.memoryFallback.delete(redisKey);
+    if (!this.redis) return;
     try {
       await this.redis.del(redisKey);
     } catch (error) {

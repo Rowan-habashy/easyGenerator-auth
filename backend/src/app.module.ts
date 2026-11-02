@@ -28,9 +28,10 @@ import { UsersModule } from './users/users.module';
     RedisModule,
     ThrottlerModule.forRootAsync({
       inject: [REDIS, APP_CONFIG],
-      useFactory: (redis: Redis, cfg: AppConfig) => ({
+      useFactory: (redis: Redis | null, cfg: AppConfig) => ({
         throttlers: [{ ttl: cfg.throttle.ttlMs, limit: cfg.throttle.limit }],
-        storage: new RedisThrottlerStorage(redis),
+        // memory store: the throttler's built-in storage is used
+        ...(redis ? { storage: new RedisThrottlerStorage(redis) } : {}),
       }),
     }),
     DatabaseModule,
