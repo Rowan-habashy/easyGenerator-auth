@@ -1,6 +1,6 @@
 # Authentication Flow (overview)
 
-Technical rules live in `c2-container.md` (platform and security), `c3-component.md` (modules, repositories, request pipeline), `c4-code.md` (interfaces, DI tokens, transactions, rules) and `database-design.md`
+Technical rules live in `c2-container.md` (platform, deployment and security) and `c3-component.md` (modules, repositories, transactions, request pipeline), and the data model is in `database-design.md`
 
 | # | Flow | Summary |
 |---|---|---|
@@ -8,6 +8,8 @@ Technical rules live in `c2-container.md` (platform and security), `c3-component
 | 2 | Sign in | Check credentials, start a session, return tokens |
 | 3 | Session and refresh | Call protected endpoints, renew tokens when the access token expires |
 | 4 | Logout | End the session and clear the cookie |
+
+**Cookie rule (applies to sign up, sign in, refresh and logout):** the refresh token is sent in an HttpOnly, Secure, SameSite=Strict cookie, Path=/api/auth, 7-day expiration. MongoDB stores only its hash. Logout clears the cookie with the same path and attributes.
 
 ## 1. Sign up
 
@@ -30,11 +32,11 @@ sequenceDiagram
     break email exists
         B-->>F: 409 Conflict
     end
-    B->>D: create user and session together (all or nothing)
+    B->>D: create user, session and refresh-token record (hash only) in one MongoDB transaction
     break database failure
         B-->>F: 503 Service Unavailable
     end
-    B-->>F: 201 access token + user, refresh token in secure cookie
+    B-->>F: 201 access token + user, refresh token in cookie (see Cookie rule)
     F->>F: keep access token in memory, open the app
 ```
 
@@ -55,18 +57,19 @@ sequenceDiagram
     break rejected by shared checks (invalid body, too many requests, too many failed attempts, service busy)
         B-->>F: 400, 422, 429 or 503
     end
-    B->>D: find user and check password
+    B->>D: get user and password hash
+    B->>B: verify password with bcrypt
     break user unknown or wrong password
         B-->>F: 401 same generic message for both
     end
     break account disabled
         B-->>F: 403 Forbidden
     end
-    B->>D: create session
+    B->>D: create session and refresh-token record (hash only) in one MongoDB transaction
     break database failure
         B-->>F: 503 Service Unavailable
     end
-    B-->>F: 200 access token + user, refresh token in secure cookie
+    B-->>F: 200 access token + user, refresh token in cookie (see Cookie rule)
     F->>F: keep access token in memory, open the app
 ```
 
@@ -88,16 +91,23 @@ sequenceDiagram
             B-->>F: 401, cookie cleared
             F->>F: clear state, go to sign in
         end
+        break token used a moment ago (recent replay)
+            B-->>F: 409, no new tokens
+            F->>F: clear state, go to sign in (no retry)
+        end
+        break network error, outcome unknown
+            F->>F: do not resend the same token, go to sign in
+        end
         break too many requests or service busy
             B-->>F: 429 or 503
             F->>F: keep session, retry later with a limit
         end
-        B->>D: replace the old refresh token with a new one (single use)
+        B->>D: check session is still active, replace the old refresh token with a new one (single use)
         B-->>F: new access token + new refresh token in cookie
         F->>B: repeat the original request once
         B-->>F: 200 data, or 401 then go to sign in (no second refresh)
     end
-    Note over F,B: A refresh token that was already used never gets new tokens. Reuse of an old token can end the whole session. If a refresh response is lost, the frontend retries once, then asks the user to sign in again.
+    Note over F,B: A refresh token that was already used never gets new tokens. Reuse of an old token can end the whole session. If a refresh response is lost, the server may already have issued R2 while the browser still holds R1. This cannot be recovered, because resending R1 can never return R2 and can trigger session revocation. The frontend never resends the same token and asks the user to sign in again.
 ```
 
 ## 4. Logout
