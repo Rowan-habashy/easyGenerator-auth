@@ -13,7 +13,7 @@ export function ProtectedRoute({ children }: { children: ReactElement }) {
 
 export function AuthResolvedRoute({ children }: { children: ReactElement }) {
   const { status } = useAuth()
-  if (status === 'loading') return null
+  if (status === 'loading') return <Spinner />
   return children
 }
 

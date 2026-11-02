@@ -10,7 +10,7 @@ vi.mock('../../src/hooks/use-auth', () => ({
 }))
 
 describe('route guards', () => {
-  it('AuthResolvedRoute renders nothing while loading', () => {
+  it('AuthResolvedRoute renders spinner while loading', () => {
     vi.mocked(useAuth).mockReturnValue({
       status: 'loading',
       user: null,
@@ -23,7 +23,7 @@ describe('route guards', () => {
       createElement(MemoryRouter, undefined, createElement(AuthResolvedRoute, { children: createElement('div', undefined, 'x') }))
     )
 
-    expect(html).toBe('')
+    expect(html).toContain('aria-label="Loading"')
   })
 
   it('ProtectedRoute redirects anonymous users to login', () => {
