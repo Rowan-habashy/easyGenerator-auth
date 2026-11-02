@@ -1,0 +1,1 @@
+# easyGenerator-auth-app
