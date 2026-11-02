@@ -88,13 +88,6 @@ classDiagram
     UsersService --> User
 ```
 
-Password rule (shared by backend DTO and frontend zod schema):
-`^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$`
-
-Controller behavior: `signUp`/`signIn`/`refresh` return `{accessToken, user}` in the body and set the `refresh_token` cookie (`httpOnly; Secure; SameSite=Strict; Path=/api/auth`). `logout` revokes the family and clears the cookie. `refresh` and `logout` are protected by `OriginGuard`.
-
-Rotation rule: a refresh token that is already used or revoked revokes its whole `familyId` and returns 401.
-
 ## Frontend modules
 
 ```mermaid
@@ -104,7 +97,7 @@ classDiagram
         +signIn(creds) Promise
         +signUp(data) Promise
         +signOut() void
-        +bootstrap() Promise
+        +bootstrap() Promise  refresh then GET /users/me, else /signin
     }
     class TokenStore {
         -accessToken: string | null  memory only

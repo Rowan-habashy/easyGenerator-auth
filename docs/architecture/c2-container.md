@@ -15,10 +15,3 @@ flowchart LR
     api -- "Mongoose (TCP 27017)" --> db
 ```
 
-| Container | Tech | Responsibility |
-|---|---|---|
-| Frontend SPA | React, TypeScript, Vite, react-hook-form, zod, React Router, axios | Forms + client validation, in-memory access token, single-flight refresh on 401, bootstrap via `/auth/refresh`, route guarding |
-| Backend API | NestJS, class-validator, Passport-JWT, bcrypt, cookie-parser, Helmet, Throttler | Sign up/in, access JWT (15m), opaque refresh token rotation with reuse detection, logout, Origin check, protected endpoints, logging, error handling |
-| MongoDB | MongoDB 7 via Mongoose | Persists users (unique email index, hashed password) and `refresh_tokens` (SHA-256 hash, `familyId`, TTL index) |
-
-Cross-cutting: the refresh cookie is `httpOnly; Secure; SameSite=Strict; Path=/api/auth`. CORS uses an exact origin allowlist with credentials. See `auth-flow.md` for XSS/CSRF details.
