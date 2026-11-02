@@ -1,77 +1,171 @@
 # C3 – Component Diagram
 
-## Backend API (NestJS)
+## 1. Modules and imports
+
+Feature-based modules. Only `AuthModule` combines them. No cycles.
 
 ```mermaid
 flowchart TB
-    client([Frontend SPA])
+    app["AppModule"]
+    auth["AuthModule<br/>controller, AuthService, TokenService,<br/>LoginAttemptService, guards"]
+    users["UsersModule<br/>UsersService"]
+    sessions["SessionsModule<br/>SessionsService"]
+    rtokens["RefreshTokensModule<br/>RefreshTokensService"]
+    rl["RateLimitModule<br/>RATE_LIMIT_STORE, throttler guards"]
+    db["DatabaseModule, global<br/>Mongoose connection<br/>TRANSACTION_RUNNER"]
+    cfg["ConfigModule, global<br/>env validation"]
+    common["CommonModule<br/>AuditLogger, HttpExceptionFilter, OriginGuard"]
 
-    subgraph api[Backend API]
-        direction TB
-        subgraph pipe[Request pipeline, in order]
-            direction TB
-            p1["1 CORS allowlist, body size limit, JSON parse<br/>(413, 400)"]
-            p2["2 IpThrottlerGuard<br/>(429, 503 if Redis down)"]
-            p3["3 OriginGuard, cookie routes only<br/>(403)"]
-            p4["4 JwtAuthGuard, protected routes only<br/>token + session check (401, 503)"]
-            p5["5 UserThrottlerGuard, protected routes only<br/>(429, fails open)"]
-            p6["6 ValidationPipe<br/>(422)"]
-            p1 --> p2 --> p3 --> p4 --> p5 --> p6
-        end
-        subgraph auth[AuthModule]
-            ac["AuthController<br/>signup, signin, refresh, logout"]
-            as["AuthService<br/>orchestrates the flows"]
-            ss["SessionService<br/>create, check, revoke sessions<br/>runs MongoDB transactions"]
-            rts["RefreshTokenService<br/>issue, rotate, reuse policy"]
-            ts["TokenService<br/>sign and verify access JWT"]
-            lat["LoginAttemptService<br/>failed sign in counters and delays"]
-        end
-        subgraph users[UsersModule]
-            uc["UsersController<br/>GET /users/me"]
-            us["UsersService"]
-        end
-        subgraph shared[Shared]
-            rl["RateLimitStore (interface)<br/>RedisStore default, MemoryStore for tests"]
-            al["AuditLogger<br/>events, never secrets"]
-            ef["HttpExceptionFilter<br/>mapped status, generic 500"]
-        end
-    end
-    db[("MongoDB replica set")]
-    redis[("Redis")]
-
-    client --> p1
-    p6 --> ac --> as
-    p6 --> uc --> us
-    as --> us
-    as --> ss --> db
-    as --> rts --> db
-    as --> ts
-    as --> lat --> rl
-    p2 --> rl
-    p5 --> rl
-    rl --> redis
-    us --> db
-    p4 --> ss
-    p4 --> ts
-    as --> al
-    rts --> al
-    ef -.-> ac
+    app --> auth & users & sessions & rtokens & rl & db & cfg & common
+    auth --> users & sessions & rtokens & rl
+    users --> db
+    sessions --> db
+    rtokens --> db
+    rl --> cfg
 ```
 
-## Responsibilities
+## 2. Request pipeline
 
-| Component | Responsibility |
-|---|---|
-| Request pipeline | The same ordered checks for every endpoint. Per-user limits run only after authentication, so `userId` is never taken from an unverified token |
-| AuthService | Runs sign up, sign in, refresh and logout. No database details inside |
-| SessionService | One session per login. Starts, checks and revokes sessions. Owns the MongoDB transactions and their retry rules |
-| RefreshTokenService | Creates tokens (random value first, then hash), rotates them in one transaction, applies the reuse policy |
-| TokenService | Signs the access JWT only after the transaction commits. Verifies signature, algorithm, `iss`, `aud`, `exp` |
-| LoginAttemptService | Counts failed sign ins per email hash, applies the progressive delay. Unknown emails are counted the same way |
-| RateLimitStore | One interface for all counters. Redis is the default, memory is for tests |
-| AuditLogger | Records sign up, sign in success and failure, throttling, logout, refresh reuse and Redis or commit outages |
+```mermaid
+flowchart LR
+    client([Frontend SPA])
+    p1["1 CORS, body size,<br/>JSON parse<br/>413, 400"]
+    p2["2 IpThrottlerGuard<br/>429, 503"]
+    p3["3 OriginGuard<br/>cookie routes only<br/>403"]
+    p4["4 JwtAuthGuard<br/>protected routes only<br/>401, 503"]
+    p5["5 UserThrottlerGuard<br/>protected routes only<br/>429, fails open"]
+    p6["6 ValidationPipe<br/>422"]
+    ctl["Controller"]
+    filt["HttpExceptionFilter<br/>maps errors, generic 500"]
 
-## Frontend SPA (React)
+    client --> p1 --> p2 --> p3 --> p4 --> p5 --> p6 --> ctl
+    ctl -. "any error" .-> filt
+    filt --> client
+```
+
+## 3. Layering inside a feature module
+
+Dependency direction: controller, then service, then repository interface. The Mongoose class implements the interface.
+
+```mermaid
+flowchart LR
+    ctl["Controller<br/>thin"]
+    svc["Service<br/>business rules"]
+    iface(["Repository interface<br/>+ injection token"])
+    impl["Mongoose repository<br/>+ schema"]
+    db[("MongoDB")]
+
+    ctl --> svc --> iface
+    impl -. "implements" .-> iface
+    impl --> db
+```
+
+## 4. Backend components
+
+```mermaid
+flowchart TB
+    subgraph authm[AuthModule]
+        ac["AuthController"]
+        as["AuthService<br/>orchestrates the four flows<br/>owns the transaction boundary"]
+        ts["TokenService<br/>access JWT"]
+        lat["LoginAttemptService"]
+    end
+    subgraph usersm[UsersModule]
+        us["UsersService"]
+        ur(["UsersRepository"])
+        urm["MongooseUsersRepository"]
+        uc["UsersController<br/>GET /users/me"]
+    end
+    subgraph sessm[SessionsModule]
+        ss["SessionsService"]
+        sr(["SessionsRepository"])
+        srm["MongooseSessionsRepository"]
+    end
+    subgraph rtm[RefreshTokensModule]
+        rts["RefreshTokensService<br/>generate, rotate, reuse policy"]
+        rr(["RefreshTokensRepository"])
+        rrm["MongooseRefreshTokensRepository"]
+    end
+    subgraph dbm[DatabaseModule]
+        tr(["TransactionRunner"])
+        trm["MongooseTransactionRunner"]
+    end
+    subgraph rlm[RateLimitModule]
+        rl(["RateLimitStore<br/>strategy"])
+        redisS["RedisRateLimitStore<br/>default"]
+        memS["MemoryRateLimitStore<br/>tests"]
+    end
+    al["AuditLogger"]
+    mongo[("MongoDB replica set")]
+    redis[("Redis")]
+
+    ac --> as
+    as --> us & ss & rts & ts & lat & tr & al
+    uc --> us
+    us --> ur
+    ss --> sr
+    rts --> rr
+    rts --> al
+    lat --> rl
+    urm -. implements .-> ur
+    srm -. implements .-> sr
+    rrm -. implements .-> rr
+    trm -. implements .-> tr
+    redisS -. implements .-> rl
+    memS -. implements .-> rl
+    urm & srm & rrm & trm --> mongo
+    redisS --> redis
+```
+
+## 5. Transaction boundary per flow
+
+`AuthService` opens one transaction through `TransactionRunner`. Each repository write joins it. The access JWT is signed only after the commit.
+
+```mermaid
+flowchart LR
+    subgraph signup[Sign up]
+        a1["register user"] --> a2["start session"] --> a3["issue refresh token"]
+    end
+    subgraph signin[Sign in]
+        b1["start session"] --> b2["issue refresh token"]
+    end
+    subgraph refresh[Refresh rotation]
+        c1["mark old token used<br/>only if still active"] --> c2["create next token"]
+    end
+    subgraph logout[Logout and reuse revocation]
+        d1["revoke session"] --> d2["revoke all its tokens"]
+    end
+
+    a3 --> commit(["commit"])
+    b2 --> commit
+    c2 --> commit
+    d2 --> commit
+    commit --> jwt["then sign access JWT"]
+```
+
+## 6. Rate-limit strategy
+
+```mermaid
+flowchart LR
+    ipg["IpThrottlerGuard"]
+    ug["UserThrottlerGuard"]
+    lat["LoginAttemptService"]
+    as["AuthService<br/>signup and refresh counters"]
+    rl(["RateLimitStore<br/>hit(key, limit, window)"])
+    cfg{"RATE_LIMIT_STORE"}
+    redisS["RedisRateLimitStore<br/>one atomic script per hit"]
+    memS["MemoryRateLimitStore<br/>unit tests"]
+    redis[("Redis")]
+
+    ipg & ug & lat & as --> rl
+    cfg -- "redis, default" --> redisS
+    cfg -- "memory" --> memS
+    redisS -. implements .-> rl
+    memS -. implements .-> rl
+    redisS --> redis
+```
+
+## 7. Frontend components
 
 ```mermaid
 flowchart TB
@@ -81,10 +175,11 @@ flowchart TB
         su["SignUpPage + form"]
         si["SignInPage + form"]
         app["ApplicationPage<br/>Welcome + Logout"]
-        val["Validation schemas (zod)"]
+        val["Validation schemas, zod"]
         ctx["AuthContext / useAuth"]
-        http["API client (axios, withCredentials)<br/>RefreshCoordinator"]
-        store["In-memory access token store"]
+        http["ApiClient<br/>axios, withCredentials"]
+        rc["RefreshCoordinator"]
+        store["TokenStore<br/>memory only"]
         boot["Session bootstrap<br/>refresh, then GET /users/me"]
     end
     api([Backend API])
@@ -95,11 +190,31 @@ flowchart TB
     su & si --> ctx --> http --> api
     ctx --> store
     http --> store
+    http --> rc
     ctx --> boot --> http
     app --> ctx
 ```
 
-| Component | Responsibility |
-|---|---|
-| RefreshCoordinator | One refresh at a time (single-flight). Each request is retried at most once after a refresh. A 401 from refresh means sign in again, with no more refresh attempts |
-| Error handling | 429 and 503 keep the session and retry with capped backoff. A lost refresh response gets one retry, then a "please sign in" message |
+## 8. RefreshCoordinator behavior
+
+```mermaid
+flowchart TB
+    req["API request"] --> send["send with access token"]
+    send --> ok{"response"}
+    ok -- "2xx" --> done(["return data"])
+    ok -- "401 and not yet retried" --> flight{"refresh already<br/>in flight?"}
+    flight -- "yes" --> wait["wait for its result"]
+    flight -- "no" --> doref["refresh once"]
+    doref --> rres{"refresh result"}
+    wait --> rres
+    rres -- "success" --> retry["retry request once<br/>mark retried"]
+    retry --> r2{"response"}
+    r2 -- "2xx" --> done
+    r2 -- "401" --> out(["clear state, go to sign in"])
+    rres -- "401" --> out
+    rres -- "409 or network error" --> once{"second failure?"}
+    once -- "no" --> doref
+    once -- "yes" --> msg(["clear state, show<br/>please sign in"])
+    rres -- "429 or 503" --> back["capped backoff<br/>max 3 attempts, keep session"]
+    ok -- "401 already retried" --> out
+```
