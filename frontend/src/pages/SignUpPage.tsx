@@ -15,7 +15,7 @@ export function SignUpPage() {
   )
 
   return (
-  <Card>
+    <Card>
       <Brand />
       <h1 className="mb-1 mt-4 text-2xl font-bold">Create your account</h1>
       <p className="mb-5 text-slate-500">It only takes a minute.</p>
@@ -24,7 +24,10 @@ export function SignUpPage() {
         <Field id="name" label="Name" autoComplete="name" {...bind('name')} />
         <Field id="email" label="Email" type="email" autoComplete="email" {...bind('email')} />
         <Field id="password" label="Password" type="password" autoComplete="new-password" {...bind('password')} />
-  <p className="-mt-2 mb-4 text-sm text-slate-500">At least {LIMITS.PASSWORD_MIN} characters.</p>
+        <p className="-mt-2 mb-4 text-sm text-slate-500">
+          Name must be at least {LIMITS.NAME_MIN} characters. Password must be {LIMITS.PASSWORD_MIN}+ characters with at least one
+          letter, one number, and one special character.
+        </p>
         <Button type="submit" disabled={submitting}>
           {submitting ? 'Creating account…' : 'Sign up'}
         </Button>

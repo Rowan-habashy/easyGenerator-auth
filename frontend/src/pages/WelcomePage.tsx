@@ -39,6 +39,7 @@ export function WelcomePage() {
         </nav>
       </header>
       <main className="mx-auto my-20 max-w-2xl px-6 text-center">
+        <p className="text-sm font-semibold uppercase tracking-wide text-brand-600">Welcome to the application.</p>
         <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
           {authed && user ? `Hello, ${user.name}` : 'Build faster with easyGenerator'}
         </h1>
