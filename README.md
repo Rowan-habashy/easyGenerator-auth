@@ -2,6 +2,12 @@
 
 Monorepo for the easyGenerator auth project.
 
+## Live demo
+
+- Frontend app: `https://easy-generator-auth.vercel.app/login`
+- Backend base URL: `https://easygenerator-auth-api.onrender.com/`
+- API docs (Swagger): `https://easygenerator-auth-api.onrender.com/api/docs`
+
 ## Project structure
 
 - `backend/` — NestJS API (auth, users, sessions, tokens)
