@@ -12,7 +12,7 @@ describe('Auth DTOs', () => {
     const dto = plainToInstance(SignUpDto, {
       email: '  ROWAN@EXAMPLE.COM ',
       name: '  Rowan  ',
-      password: 'Password123',
+      password: 'Password123!',
     });
 
     const errors = validateSync(dto);
@@ -24,14 +24,27 @@ describe('Auth DTOs', () => {
   it('SignUpDto rejects invalid email and short password', () => {
     const dto = plainToInstance(SignUpDto, {
       email: 'bad-email',
-      name: 'R',
+      name: 'Ro',
       password: 'short',
     });
 
     const errors = validateSync(dto);
     const fields = errors.map((e) => e.property);
     expect(fields).toContain('email');
+    expect(fields).toContain('name');
     expect(fields).toContain('password');
+  });
+
+  it('SignUpDto rejects password missing complexity requirements', () => {
+    const dto = plainToInstance(SignUpDto, {
+      email: 'rowan@example.com',
+      name: 'Rowan',
+      password: 'abcdefgh',
+    });
+
+    const errors = validateSync(dto);
+    const passwordError = errors.find((error) => error.property === 'password');
+    expect(passwordError).toBeDefined();
   });
 
   it('SignInDto rejects empty password and too long email', () => {
