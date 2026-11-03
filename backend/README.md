@@ -27,9 +27,28 @@ Shared code:
 1. Copy env file and set required variables:
    - `cp .env.example .env`
    - set `JWT_SECRET`
-2. Start MongoDB as a **replica set** (required for transactions):
-   - `mongod --replSet rs0`
-   - then run `rs.initiate()` in `mongosh` (first time only)
+2. Open MongoDB locally as a **replica set** (required for transactions):
+   - Install once (macOS/Homebrew):
+     - `brew tap mongodb/brew`
+     - `brew install mongodb-community@8.0 mongosh`
+   - Start a local instance in replica-set mode (project-local data directory):
+     - `mkdir -p ../.mongo-data`
+     - `mongod --replSet rs0 --dbpath ../.mongo-data --bind_ip 127.0.0.1 --port 27017 --fork --logpath ../.mongo-data/mongod.log`
+   - Initialize replica set (first run only):
+     - `mongosh --quiet --eval "try { rs.status().ok; print('ALREADY_INIT'); } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'127.0.0.1:27017'}]}); print('INITIATED'); }"`
+   - Verify it is healthy:
+     - `mongosh --quiet --eval "printjson(rs.status().ok)"` (should print `1`)
+    - Install once (Windows / PowerShell):
+       - `winget install MongoDB.Server`
+       - `winget install MongoDB.Shell`
+    - Start a local instance in replica-set mode (project-local data directory):
+       - `New-Item -ItemType Directory -Force ..\.mongo-data | Out-Null`
+       - `mongod --replSet rs0 --dbpath ..\.mongo-data --bind_ip 127.0.0.1 --port 27017 --logpath ..\.mongo-data\mongod.log`
+          - Keep this terminal open while developing (or run it in a dedicated terminal tab).
+    - Initialize replica set (first run only, in a second terminal):
+       - `mongosh --quiet --eval "try { rs.status().ok; print('ALREADY_INIT'); } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'127.0.0.1:27017'}]}); print('INITIATED'); }"`
+    - Verify it is healthy:
+       - `mongosh --quiet --eval "printjson(rs.status().ok)"` (should print `1`)
 3. For local HTTP development:
    - set `COOKIE_SECURE=false`
 4. Install and run:
@@ -63,6 +82,8 @@ MONGODB_URI=mongodb://localhost:27017/easygenerator?replicaSet=rs0
 RATE_LIMIT_STORE=memory
 # REDIS_URL not required in memory mode
 ```
+
+If you launch MongoDB with the commands above, the local DB files live under `../.mongo-data`.
 
 ### Option B: local app + production database (review/debug mode)
 
